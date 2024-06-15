@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App 2</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="search-box">
+                <input type="text" placeholder="Enter city name" class="input-box">
+                <button  class="fa fa-magnifying-glass" id="searchBtn"></button>
+
+            </div>
+           
+        </div>
+        <div class="weather-body">
+            <img src="weather img/cloud.png" alt="Weather Image" class="weather-img">
+
+            <div class="weather-box">
+                <p class="temperature">0 <sup>°C</sup></p>
+                <p class="description">Clear Sky</p>
+            </div>
+
+            <div class="weather-details">
+                <div class="humidity">
+                    <i class="fa-sharp fa-solid fa-droplet"></i>
+                    <div class="text">
+                        <span id="humidity">45%</span>
+                        <p>Humidity</p>
+                    </div>
+                    <div class="wind">
+                        <i class="fa-solid fa-wind"></i>
+                        <div class="text">
+                            <span id="wind-speed">12Km/H</span>
+                            <p>Wind-Speed</p>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <script>
+            
+            const inputBox = document.querySelector(".input-box");
+            const searchBtn = document.getElementById("searchBtn");
+            const weather_img = document.querySelector(".weather-img");
+            const temperature =  document.querySelector(".temperature");
+            const description =  document.querySelector(".description");
+            const humidity =   document.getElementById("humidity");
+            const wind_speed =   document.getElementById("wind-speed");
+
+            async function checkWeather(city){
+                
+                const api_Key ="a68a2acfce936d168364780bfe54b7c4";
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_Key}`;
+
+                const weather_data = await fetch(`${url}`).then(response => response.json());
+
+                temperature.innerHTML = `${Math.round(weather_data.main.temp -273.15)}°C`;
+                description.innerHTML = `${weather_data.weather[0].description}`;
+
+                humidity.innerHTML = `${weather_data.main.humidity}%`;
+                wind_speed.innerHTML = `${weather_data.wind.speed}Km/H`;
+
+
+                switch(weather_data.weather[0].main){
+                    case 'Clouds':
+                        weather_img.src ="weather img/cloud.png";
+                        break;
+                    case 'Clear':
+                        weather_img.src ="weather img/clear.png";
+                        break; 
+                    case 'Rain':
+                        weather_img.src ="weather img/rine.png";
+                        break; 
+                    case 'Mist':
+                        weather_img.src ="weather img/mist.png";
+                        break; 
+                    case 'Snow':
+                        weather_img.src ="weather img/snow.png"; 
+                        break;
+                }
+
+                
+
+            }
+            searchBtn.addEventListener('click' , ()=>{
+                checkWeather(inputBox.value);
+            });
+            
+            
+            </script>
+    
+</body>
+</html>
